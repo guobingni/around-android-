@@ -17,6 +17,16 @@ public class Event {
     private long time;
     private String username;
 
+    private int CommentNumber;
+
+    public int getCommentNumber() {
+        return CommentNumber;
+    }
+
+    public void setCommentNumber(int commentNumber) {
+        CommentNumber = commentNumber;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
