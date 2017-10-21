@@ -1,5 +1,12 @@
 package com.laioffer.eventreporter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Created by guo on 2017/8/28.
  */
@@ -18,13 +25,36 @@ public class Event {
     private String username;
 
     private int CommentNumber;
+    private Map<String, Boolean> map = new HashMap<>();
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", id);
+        result.put("username", username);
+        result.put("map", map);
+        result.put("title", title);
+        result.put("address", address);
+        result.put("description", description);
+        result.put("like", like);
+        result.put("time", time);
+        result.put("CommentNumber", CommentNumber);
+        return result;
+    }
+
+    public Map<String, Boolean> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<String, Boolean> map) {
+        this.map = map;
+    }
 
     public int getCommentNumber() {
         return CommentNumber;
     }
 
     public void setCommentNumber(int commentNumber) {
-        CommentNumber = commentNumber;
+        this.CommentNumber = commentNumber;
     }
 
     public void setTitle(String title) {

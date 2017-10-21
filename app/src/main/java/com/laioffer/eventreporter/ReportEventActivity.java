@@ -28,7 +28,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ReportEventActivity extends AppCompatActivity {
     private static final String TAG = ReportEventActivity.class.getSimpleName();

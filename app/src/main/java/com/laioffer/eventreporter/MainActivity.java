@@ -2,7 +2,9 @@ package com.laioffer.eventreporter;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,10 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity implements EventFragment.OnItemSelectListener, CommentFragment.OnItemSelectListener{
-    private EventFragment mListFragment;
-    private CommentFragment mGridFragment;
-
+public class MainActivity extends AppCompatActivity {
     private EditText mUsernameEditText;
     private EditText mPasswordEditText;
     private Button mSubmitButton;
@@ -102,37 +101,7 @@ public class MainActivity extends AppCompatActivity implements EventFragment.OnI
                 });
             }
         });
-
-        // Write a message to the database
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("message");
-//
-//        myRef.setValue("Hello, World!");
-
-        //add list view
-//        mListFragment = new EventFragment();
-//        getSupportFragmentManager().beginTransaction().add(R.id.event_container, mListFragment).commit();
-//
-
-        //add Gridview
-//        if (isTablet()) {
-//            mGridFragment = new CommentFragment();
-//            getSupportFragmentManager().beginTransaction().add(R.id.comment_container, mGridFragment).commit();
-//        }
     }
-
-    private boolean isTablet() {
-        return (getApplicationContext().getResources().getConfiguration().screenLayout &
-                Configuration.SCREENLAYOUT_SIZE_MASK) >=
-                Configuration.SCREENLAYOUT_SIZE_LARGE;
-    }
-
-    /**
-     * A dummy function to get fake event names.
-     *
-     * @return an array of fake event names.
-     */
-
 
     @Override
     protected void onStart() {
@@ -162,15 +131,5 @@ public class MainActivity extends AppCompatActivity implements EventFragment.OnI
     protected void onDestroy() {
         super.onDestroy();
         Log.e("Life cycle test", "We are at onDestroy()");
-    }
-
-    @Override
-    public void onItemSelected(int position) {
-        mGridFragment.onItemSelected(position);
-    }
-
-    @Override
-    public void onItemSelected1(int position) {
-        mListFragment.onItemSelected(position);
     }
 }

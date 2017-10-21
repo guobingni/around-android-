@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.NativeExpressAdView;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,16 +49,17 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     //constructor
     public EventListAdapter(List<Event> events, final Context context) {
         databaseReference = FirebaseDatabase.getInstance().getReference();
+
         Collections.sort(events, new Comparator<Event>() {
             @Override
             public int compare(Event A, Event B) {
-                return (int)(B.getTime() - A.getTime());
+                return B.getTime() - A.getTime() > 0 ? 1 : -1;
             }
         });
         eventList = new ArrayList<Event>();
         int count = 0;
         for (int i = 0; i < events.size(); i++) {
-            if (i % 2 == 1) {
+            if (i % 3 == 1) {
                 //Use a set to record advertisement position
                 map.put(i + count, new NativeExpressAdView(context));
                 count++;
@@ -137,6 +139,8 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         holder.description.setText(event.getDescription());
         holder.time.setText(Utils.timeTransformer(event.getTime()));
         holder.good_number.setText(String.valueOf(event.getLike()));
+        holder.comment_number.setText(String.valueOf(event.getCommentNumber()));
+
 
         if (event.getImgUri() != null) {
             final String url = event.getImgUri();
@@ -156,6 +160,13 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.imgview.setVisibility(View.GONE);
         }
 
+        Map<String, Boolean> voted = event.getMap();
+        if (!voted.containsKey(Utils.username) || !voted.get(Utils.username)) {
+            holder.img_view_good.setImageResource(R.drawable.like);
+        } else {
+            holder.img_view_good.setImageResource(R.drawable.liked);
+        }
+
         holder.img_view_good.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,13 +177,28 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             Event recordedevent = snapshot.getValue(Event.class);
                             if (recordedevent.getId().equals(event.getId())) {
                                 int number = recordedevent.getLike();
-                                holder.good_number.setText(String.valueOf(number + 1));
-                                snapshot.getRef().child("like").setValue(number + 1);
+                                Map<String, Boolean> votedUsers = event.getMap();
+                                Map<String, Object> childUpdates = new HashMap<>();
+                                if (!votedUsers.containsKey(Utils.username) || !votedUsers.get(Utils.username)) {
+                                    votedUsers.put(Utils.username, true);
+                                    holder.img_view_good.setImageResource(R.drawable.liked);
+                                    holder.good_number.setText(String.valueOf(number + 1));
+                                    number++;
+                                } else {
+                                    votedUsers.put(Utils.username, false);
+                                    holder.img_view_good.setImageResource(R.drawable.like);
+                                    holder.good_number.setText(String.valueOf(number - 1));
+                                    number--;
+                                }
+                                event.setMap(votedUsers);
+                                event.setLike(number);
+                                Map<String, Object> votedValues = event.toMap();
+                                childUpdates.put("/events/" + event.getId(), votedValues);
+                                databaseReference.updateChildren(childUpdates);
                                 break;
                             }
                         }
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 

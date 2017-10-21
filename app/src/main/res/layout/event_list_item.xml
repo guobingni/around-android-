@@ -64,42 +64,39 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
-            android:orientation="vertical">
-            <TextView android:id="@+id/event_good_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:gravity="center"
-                android:textSize="20sp"/>
+            android:orientation="horizontal">
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_below="@id/event_good_number"
                 android:src="@drawable/like"
-                android:id="@+id/event_good_img"
-                />
-
+                android:id="@+id/event_good_img"/>
+            <TextView
+                android:id="@+id/event_good_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="0"
+                android:gravity="center"
+                android:textSize="20sp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:layout_marginLeft="50dp"
-            android:orientation="vertical">
-            <TextView android:id="@+id/event_comment_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/event_good_number"
-                android:text="0"
-                android:gravity="center"
-                android:textSize="20sp"/>
+            android:layout_marginLeft="30dp"
+            android:orientation="horizontal">
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_toRightOf="@id/event_good_number"
                 android:src="@drawable/comment"
-                android:id="@+id/event_comment_img"
-                />
-
+                android:id="@+id/event_comment_img"/>
+            <TextView android:id="@+id/event_comment_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="0"
+                android:gravity="center"
+                android:textSize="20sp"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

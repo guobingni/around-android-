@@ -3,7 +3,9 @@ package com.laioffer.eventreporter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,7 +32,8 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventsFragment extends Fragment {
+public class EventsFragment extends Fragment implements
+        SwipeRefreshLayout.OnRefreshListener{
     private ImageView mImageViewAdd;
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1072772517";
 
@@ -40,17 +43,37 @@ public class EventsFragment extends Fragment {
     private DatabaseReference database;
     private List<Event> events;
 
+    private SwipeRefreshLayout swipeLayout;
+    private boolean isRefresh = false;
+
     public EventsFragment() {
         // Required empty public constructor
 
     }
 
+    public void onRefresh() {
+        if(!isRefresh){
+            isRefresh = true;
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    swipeLayout.setRefreshing(false);
+                    mAdapter.notifyDataSetChanged();
+                    setAdapter();
+                    isRefresh= false;
+                }
+            }, 3000);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_events, container, false);
+
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+
         mImageViewAdd = (ImageView) view.findViewById(R.id.img_event_add);
 
         mImageViewAdd.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +131,6 @@ public class EventsFragment extends Fragment {
                         adView.setAdUnitId(AD_UNIT_ID);
                         loadNativeExpressAd(i, adView);
                     }
-
                 }
             }
         });

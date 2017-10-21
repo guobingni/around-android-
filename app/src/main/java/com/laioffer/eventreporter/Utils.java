@@ -1,8 +1,13 @@
 package com.laioffer.eventreporter;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.apache.commons.codec.binary.Hex;
 
@@ -15,16 +20,17 @@ import java.security.MessageDigest;
 import java.util.concurrent.TimeUnit;
 
 public class Utils {
-    public static String username= null;
-    public  static String md5Encryption(final String input){
+    public static String username = null;
+
+    public static String md5Encryption(final String input) {
         String result = "";
-        try{
+        try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             messageDigest.reset();
             messageDigest.update(input.getBytes(Charset.forName("UTF8")));
             byte[] resultByte = messageDigest.digest();
             result = new String(Hex.encodeHex(resultByte));
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return result;
